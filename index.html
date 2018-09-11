@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="res/css/style.css">
+	<title>mediaPlayer</title>
+</head>
+
+<body id="body">
+	<!-- メディアリスト -->
+	<div id="mediaList">
+		<video id="video"></video>
+	</div>
+
+	<!-- オーバーレイ -->
+	<div id="overlay" class="show">
+		<div id="upperPart"></div>
+		<div id="center">
+			<div id="readProgressBar">
+				<div id="readPercent">0%</div>
+			</div>
+			<p id="infoMessage">ドラッグ&ドロップでファイルを選択</p>
+		</div>
+		<div id="bottom"></div>
+	</div>
+
+	<!-- ファイル名 -->
+	<p id="fileName" class="show">ここをクリックしてファイルを選択</p>
+
+	<!-- コントロールパネル -->
+	<div id="controlPanel" class="show">
+		<div id="seekbarSpace">
+			<input id="seekbar" type="range" min="0" step="0.01">
+			<div id="progressBar"></div>
+			<div id="progressPoint"></div>
+		</div>
+		<div id="operation">
+			<div id="operation_left">
+				<div id="volumeSpace">
+					<div id="volumeImageSpace" title="音量/ミュート">
+						<img id="VM_1" src="res/img/img_volume_1.png">
+						<img id="VM_2" src="res/img/img_volume_2.png">
+					</div>
+					<div id="volumeHover">
+						<div id="volumeVar">
+							<div id="volumePointer"></div>
+							<div id="volumeFrame">
+								<div id="volumeInside"></div>
+							</div>
+						</div>
+						<div id="volumeSpace">
+							<p id="volume"></p>
+						</div>
+					</div>
+				</div>
+				<div id="playbackTimeSpace">
+					<p id="playbackTime">00:00:00.00 / 00:00:00.00</p>
+				</div>
+			</div>
+			<div id="operation_right">
+				<div id="loop" title="ループ">
+					<img class="loopImage" id="LP_1" src="res/img/notLoop.png">
+					<img class="loopImage" id="LP_2" src="res/img/loop.png">
+				</div>
+				<div id="fullscreen" title="全画面">
+					<img class="fullscreenImage" id="FS_1" src="res/img/fullscreen.png">
+					<img class="fullscreenImage" id="FS_2" src="res/img/fullscreen_2.png">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- ドロップエリア -->
+	<div id="dragNdropArea">
+		<div id="border">
+			<p id="infoText">ここにファイルをドロップ</p>
+			<input type="file" name="ファイルを選択" id="mediaFileInput" accept="video/*">
+		</div>
+	</div>
+
+	<!-- スクリプト -->
+	<script src="res/js/player.js"></script>
+	<script src="res/js/file.js"></script>
+</body>
+
+</html>
