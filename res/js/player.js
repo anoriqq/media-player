@@ -371,6 +371,10 @@ document.onkeydown = function(e){
 		}else{
 			document.getElementById("video").volume = 1;
 		}
+		setTimeout(function(){
+			document.getElementById("volumeHover").classList.remove("show");
+			document.getElementById("volumePointer").classList.remove("show");
+		},1000);
 	}
 
 	/* downキーを押したときに音量を下げる */
@@ -380,6 +384,10 @@ document.onkeydown = function(e){
 		}else{
 			document.getElementById("video").volume = 0;
 		}
+		setTimeout(function(){
+			document.getElementById("volumeHover").classList.remove("show");
+			document.getElementById("volumePointer").classList.remove("show");
+		},1000);
 	}
 };
 
@@ -561,9 +569,5 @@ document.onchange = function(){
 		document.getElementById("volume").innerText = Math.round(mediaVolume * 100); // 現在の音量を表示する[0 ~ 100]
 		document.getElementById("volumeInside").style.width = mediaVolume * 100 + "%";
 		document.getElementById("volumePointer").style.left = 45 + 150 * mediaVolume + "px";
-		setTimeout(function(){
-			document.getElementById("volumeHover").classList.remove("show");
-			document.getElementById("volumePointer").classList.remove("show");
-		},1000);
 	};
 };
