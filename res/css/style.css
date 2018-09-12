@@ -81,27 +81,7 @@ html,body{
 	width: 100%;
 	background: linear-gradient(to top, rgb(0, 0, 0), rgba(0, 0, 0, 0));
 }
-/*centerの子要素*/
-#readProgressBar{
-	margin: auto;
-	background: blue;
-	width: 50%;
-	height: 50px;
-	display: flex;
-	border: 6px solid black;
-	transition: opacity 1s linear;
-	opacity: 0;
-}
-#readProgressBar.loading {
-	opacity: 1;
-}
 /*readProgressBarの子要素*/
-#readPercent{
-	background: yellow;
-	height: 100%;
-	width: 50%;
-	font-size: 36px;
-}
 #infoMessage{
 	margin: auto;
 	color: rgba(255, 255, 255, .8);
