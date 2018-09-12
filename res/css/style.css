@@ -5,6 +5,7 @@ html,body{
 	background-color: black;
 	margin: 0px;
 	overflow: hidden;
+	user-select: none;
 }
 #mediaList{
 	height: 100%;
@@ -239,9 +240,10 @@ html,body{
 	height: 40px;
 	overflow: hidden;
 	display: flex;
-	transition: width .2s ease-out;
+	transition: width .2s ease-out .5s;
 	width: 0px;
 }#volumeHover.show{
+	transition: width .2s ease-out 0s;
 	width: 210px;
 }
 #volumeVar{
@@ -277,10 +279,11 @@ html,body{
 	position: absolute;
 	top: 13px;
 	left: 195px;
+	transition: transform .2s .5s;
 	transform: scale(0);
 }
 #volumePointer.show{
-	transition: transform .2s .2s;
+	transition: transform .2s .15s;
 	transform: scale(1);
 }
 #playbackTimeSpace{

@@ -62,6 +62,13 @@ var noMouseFlag;
 var mediaVolume = 1;
 
 /**
+ * ボリュームを調整中かどうかを保存する変数｡
+ * <br>変更中はfalse｡
+ * @type {boolean}
+ */
+var volumeHoverShow = true;
+
+/**
  * マウスがdocument上の操作領域の上にのっているかどうかを管理する関数｡
  * <br>documenntがロードされたときに実行｡
  * @returns {void}
@@ -359,6 +366,119 @@ document.onkeydown = function(e){
 };
 
 /**
+ * volumeSpaceにマウスがのったときにvolumeHoverを表示する関数
+ * @returns {void}
+ */
+document.getElementById("volumeSpace").onmouseenter = function(){
+	document.getElementById("volumeHover").classList.add("show");
+	document.getElementById("volumePointer").classList.add("show");
+};
+
+/**
+ * volumeSpaceからマウスが離れたときにvolumeHoverを非表示する関数
+ * @returns {void}
+ */
+document.getElementById("volumeSpace").onmouseleave = function(){
+	if(volumeHoverShow){
+		document.getElementById("volumeHover").classList.remove("show");
+		document.getElementById("volumePointer").classList.remove("show");
+	}
+};
+
+/**
+ * volumeSpaceでマウスホイールが回されたときに実行される関数｡
+ * <br>それぞれの方向に音量を更新する｡
+ * @param {object} e mousewheelEventオブジェクト
+ * @returns {void}
+ */
+document.getElementById("volumeSpace").onmousewheel = function(e){
+	/* プラス方向にホイールを回したとき､かつ､現在の音量が0より大きいときtrue */
+	if(e.deltaY > 0){
+		if(Math.round(document.getElementById("video").volume * 100) > 1){
+			document.getElementById("video").volume = (Math.round(document.getElementById("video").volume * 100) - 2) / 100;
+		}else{
+			document.getElementById("video").volume = 0;
+		}
+	}
+
+	/* マイナス方向にホイール回したとき､かつ､現在の音量が1未満のときtrue */
+	if(e.deltaY < 0){
+		if(Math.round(document.getElementById("video").volume * 100) < 99){
+			document.getElementById("video").volume = (Math.round(document.getElementById("video").volume * 100) + 2) / 100;
+		}else{
+			document.getElementById("video").volume = 1;
+		}
+	}
+};
+
+/**
+ * ボリュームバーをクリックしたときに実行される関数｡
+ * <br>クリックされた位置のX座標をもとに音量を更新する｡
+ * @param {object} e clickイベントオブジェクト
+ * @returns {void}
+ */
+document.getElementById("volumeFrame").onclick = function(e){
+	var clickVolume = Math.round((e.clientX - 50)/150*100)/100;
+	document.getElementById("video").volume = clickVolume;
+};
+
+/**
+ * volumePointerがドラックされているかを保存する変数｡
+ * <br>ドラックされているときtrue｡
+ * @type {boolean}
+ */
+var volumePointerDragFlag = false;
+
+/**
+ * volumePointerがクリックされたときに実行される関数｡
+ * @param {object} e mousedownEventオブジェクト
+ * @returns {void}
+ */
+document.getElementById("volumePointer").onmousedown = function(){
+	volumePointerDragFlag = true;
+	volumeHoverShow = false;
+	document.getElementById("volumeHover").classList.add("show");
+	document.getElementById("volumePointer").classList.add("show");
+};
+
+/**
+ * volumePointerをクリックしたままマウスを動かしたとき]に実行される関数｡
+ * <br>volumePointerを左右にドラッグされたときに音量を更新する｡
+ * @param {object} e mousedownEventオブジェクト
+ * @returns {void}
+ */
+window.onmousemove = function(e){
+	var volumePointerY;
+	if(volumePointerDragFlag && e.clientX != 0){
+		if(e.clientX >= 45 && e.clientX <= 195){
+			volumePointerY = e.clientX;
+		}else if(e.clientX <= 45){
+			volumePointerY = 45;
+		}else{
+			volumePointerY = 195;
+		}
+		document.getElementById("volumePointer").style.left = volumePointerY + "px";
+		document.getElementById("video").volume = Math.round((volumePointerY - 45) / 150 * 100) / 100;
+	}
+};
+
+/**
+ * volumePointerからクリックを解除したときに実行される関数｡
+ * @param {object} e mousedownEventオブジェクト
+ * @returns {void}
+ */
+window.onmouseup = function(){
+	if(volumePointerDragFlag){
+		volumeHoverShow = true;
+		volumePointerDragFlag = false;
+		document.getElementById("volumeHover").classList.remove("show");
+		document.getElementById("volumePointer").classList.remove("show");
+	}
+};
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+/**
  * documentが更新される度に各videoEventハンドラを上書きする関数｡
  * @fires document#onchange
  * @returns {void}
@@ -422,59 +542,4 @@ document.onchange = function(){
 		document.getElementById("volumeInside").style.width = mediaVolume * 100 + "%";
 		document.getElementById("volumePointer").style.left = 45 + 150 * mediaVolume + "px";
 	};
-};
-
-/**
- * volumeSpaceにマウスがのったときにvolumeHoverを表示する関数
- * @returns {void}
- */
-document.getElementById("volumeSpace").onmouseenter = function(){
-	document.getElementById("volumeHover").classList.add("show");
-	document.getElementById("volumePointer").classList.add("show");
-};
-
-/**
- * volumeSpaceからマウスが離れたときにvolumeHoverを非表示する関数
- * @returns {void}
- */
-document.getElementById("volumeSpace").onmouseleave = function(){
-	document.getElementById("volumeHover").classList.remove("show");
-	document.getElementById("volumePointer").classList.remove("show");
-};
-
-/**
- * volumeSpaceでマウスホイールが回されたときに実行される関数｡
- * <br>それぞれの方向に音量を更新する｡
- * @param {object} e mousewheelEventオブジェクト
- * @returns {void}
- */
-document.getElementById("volumeSpace").onmousewheel = function(e){
-	/* プラス方向にホイールを回したとき､かつ､現在の音量が0より大きいときtrue */
-	if(e.deltaY > 0){
-		if(Math.round(document.getElementById("video").volume * 100) > 1){
-			document.getElementById("video").volume = (Math.round(document.getElementById("video").volume * 100) - 2) / 100;
-		}else{
-			document.getElementById("video").volume = 0;
-		}
-	}
-
-	/* マイナス方向にホイール回したとき､かつ､現在の音量が1未満のときtrue */
-	if(e.deltaY < 0){
-		if(Math.round(document.getElementById("video").volume * 100) < 99){
-			document.getElementById("video").volume = (Math.round(document.getElementById("video").volume * 100) + 2) / 100;
-		}else{
-			document.getElementById("video").volume = 1;
-		}
-	}
-};
-
-/**
- * ボリュームバーをクリックしたときに実行される関数｡
- * <br>クリックされた位置のX座標をもとに音量を更新する｡
- * @param {object} e clickイベントオブジェクト
- * @returns {void}
- */
-document.getElementById("volumeFrame").onclick = function(e){
-	var clickVolume = Math.round((e.clientX - 50)/150*100)/100;
-	document.getElementById("video").volume = clickVolume;
 };
