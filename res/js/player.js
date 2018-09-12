@@ -71,7 +71,7 @@ var volumePointerDragFlag = false;
 /**
  * マウスポインターのX座標を保存する変数｡
  * <br>マウスが動く度に更新される｡
- * @type {number}}
+ * @type {number}
  */
 var clientX;
 
