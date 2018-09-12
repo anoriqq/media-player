@@ -29,20 +29,6 @@ var clicked = false;
 var doubleFlag = false;
 
 /**
- * マウスの動作を監視して､一定期間動きが無かった場合にオーバーレイを消す関数｡
- * <br>開始 => checkMouse = setInterval(mouseMoving,100);
- * <br>停止 => clearInterval(checkMouse);
- */
-var checkMouse;
-
-/**
- * メディアの全長と再生位置を監視して長さ表示とシークバー動作を更新する関数｡
- * <br>開始 => checkProgres = setInterval(playback,10);
- * <br>停止 => clearInterval(checkProgres);
- */
-var checkProgres;
-
-/**
  * イベントオブジェクトから取得した再生状態を保存する変数｡
  * @type {boolean}
  */
@@ -67,6 +53,48 @@ var mediaVolume = 1;
  * @type {boolean}
  */
 var volumeHoverShow = true;
+
+/**
+ * seekPointerがドラックされているかを保存する変数｡
+ * <br>ドラックされているときtrue｡
+ * @type {boolean}
+ */
+var seekPointerDragFlag = false;
+
+/**
+ * volumePointerがドラックされているかを保存する変数｡
+ * <br>ドラックされているときtrue｡
+ * @type {boolean}
+ */
+var volumePointerDragFlag = false;
+
+/**
+ * マウスポインターのX座標を保存する変数｡
+ * <br>マウスが動く度に更新される｡
+ * @type {number}}
+ */
+var clientX;
+
+/**
+ * マウスの動作を監視して､一定期間動きが無かった場合にオーバーレイを消すインターバル｡
+ * <br>開始 => checkMouse = setInterval(mouseMoving,100);
+ * <br>停止 => clearInterval(checkMouse);
+ */
+var checkMouse;
+
+/**
+ * メディアの全長と再生位置を監視して長さ表示とシークバー動作を更新するインターバル｡
+ * <br>開始 => checkProgres = setInterval(playback,10);
+ * <br>停止 => clearInterval(checkProgres);
+ */
+var checkProgres;
+
+/**
+ * シークバーにホバーしたときに表示するバーの処理を実行するインターバル｡
+ * <br>開始 => hoverSeekInterval = setInterval(hoverSeek,10);
+ * <br>停止 => clearInterval(hoverSeekInterval);
+ */
+var hoverSeekInterval;
 
 /**
  * マウスがdocument上の操作領域の上にのっているかどうかを管理する関数｡
@@ -245,29 +273,62 @@ function formatTime(time){
  * @returns {void}
  */
 function playback(){
+	progress = Math.floor(document.getElementById("video").currentTime / document.getElementById("video").duration * 100000) / 1000;
 	if (!document.getElementById("video").paused){
 		document.getElementById("playbackTime").innerText = formatTime(document.getElementById("video").currentTime) + " / " + formatTime(document.getElementById("video").duration);
-		progress = Math.floor(document.getElementById("video").currentTime / document.getElementById("video").duration * 100000) / 1000;
 		document.getElementById("progressBar").style.width = progress + "%";
-		document.getElementById("progressPoint").style.transform = "translateX(" + window.innerWidth * (progress / 100) + "px)";
+		document.getElementById("seekPointer").style.left = -7 + window.innerWidth * (progress / 100) + "px";
+	}else{
+		document.getElementById("progressBar").style.width = progress + "%";
+		document.getElementById("seekPointer").style.left = -7 + window.innerWidth * (progress / 100) + "px";
 	}
 }
-document.getElementById("seekbar").addEventListener("change",function(){// スライダー位置の変化に合わせて再生位置を更新する
-	document.getElementById("video").currentTime = document.getElementById("seekbar").value;
-},false);
-document.getElementById("video").addEventListener("timeupdate",function(){// 再生時間の変化に合わせてスライダーの位置を更新する
-	document.getElementById("seekbar").value = document.getElementById("video").currentTime;
-},false);
-document.getElementById("seekbarSpace").addEventListener("mouseover",function(){
-	document.getElementById("seekbar").classList.add("hover");
-	document.getElementById("progressBar").classList.add("hover");
-	document.getElementById("progressPoint").classList.add("hover");
-});
-document.getElementById("seekbarSpace").addEventListener("mouseout",function(){
-	document.getElementById("seekbar").classList.remove("hover");
-	document.getElementById("progressBar").classList.remove("hover");
-	document.getElementById("progressPoint").classList.remove("hover");
-});
+
+/**
+ * シークバーにホバーしているときにポインターの位置までバーを表示する関数｡
+ * @returns {void}
+ */
+function hoverSeek(){
+	document.getElementById("progressHover").style.width = clientX + "px";
+}
+
+/**
+ * seekbarにマウスがのったときに実行される関数｡
+ * <br>seekPointerとseekbarFrameにhoverクラスを付与して強調表示させる｡
+ * @param {object} e onmouseenterEventオブジェクト
+ * @returns {void}
+ */
+document.getElementById("seekbar").onmouseenter = function(){
+	document.getElementById("seekPointer").classList.add("hover");
+	document.getElementById("seekbarFrame").classList.add("hover");
+	hoverSeekInterval = setInterval(hoverSeek,10);
+};
+
+/**
+ * seekbarにマウスがのったときに実行される関数｡
+ * <br>seekPointerとseekbarFrameからhoverクラスを剥奪して通常表示にする｡
+ * @param {object} e onmouseleaveEventオブジェクト
+ * @returns {void}
+ */
+document.getElementById("seekbar").onmouseleave = function(){
+	clearInterval(hoverSeekInterval);
+	document.getElementById("seekPointer").classList.remove("hover");
+	document.getElementById("seekbarFrame").classList.remove("hover");
+	document.getElementById("progressHover").style.width = "0px";
+};
+
+/**
+ * シークバーをクリックしたときに実行される関数｡
+ * <br>クリックされた位置のX座標をもとに再生位置を更新する｡
+ * @param {object} e onmousedownEventオブジェクト
+ * @returns {void}
+ */
+document.getElementById("seekbarFrame").onmousedown = function(){
+	if(document.getElementById("video").src != ""){
+		seekPointerDragFlag = true;
+		document.getElementById("video").currentTime = document.getElementById("video").duration * Math.round(clientX / window.innerWidth * 10000) / 10000;
+	}
+};
 
 /**
  * フルスクリーン状態をトグルする関数
@@ -438,22 +499,26 @@ document.getElementById("volumeSpace").onmousewheel = function(e){
 };
 
 /**
- * ボリュームバーをクリックしたときに実行される関数｡
+ * seekPointerがクリックされたときに実行される関数｡
+ * @param {object} e mousedownEventオブジェクト
+ * @returns {void}
+ */
+document.getElementById("seekPointer").onmousedown = function(){
+	seekPointerDragFlag = true;
+	document.getElementById("seekbarFrame").classList.add("show");
+	document.getElementById("seekPointer").classList.add("show");
+};
+
+/**
+ * volumeFrameをクリックしたときに実行される関数｡
  * <br>クリックされた位置のX座標をもとに音量を更新する｡
  * @param {object} e clickイベントオブジェクト
  * @returns {void}
  */
-document.getElementById("volumeFrame").onclick = function(e){
-	var clickVolume = Math.round((e.clientX - 50)/150*100)/100;
-	document.getElementById("video").volume = clickVolume;
+document.getElementById("volumeFrame").onmousedown = function(e){
+	volumePointerDragFlag = true;
+	document.getElementById("video").volume = Math.round((e.clientX - 50)/150*100)/100;
 };
-
-/**
- * volumePointerがドラックされているかを保存する変数｡
- * <br>ドラックされているときtrue｡
- * @type {boolean}
- */
-var volumePointerDragFlag = false;
 
 /**
  * volumePointerがクリックされたときに実行される関数｡
@@ -474,17 +539,20 @@ document.getElementById("volumePointer").onmousedown = function(){
  * @returns {void}
  */
 window.onmousemove = function(e){
-	var volumePointerY;
+	clientX = e.clientX;
+	var volumePointerX;
 	if(volumePointerDragFlag && e.clientX != 0){
 		if(e.clientX >= 45 && e.clientX <= 195){
-			volumePointerY = e.clientX;
+			volumePointerX = e.clientX;
 		}else if(e.clientX <= 45){
-			volumePointerY = 45;
+			volumePointerX = 45;
 		}else{
-			volumePointerY = 195;
+			volumePointerX = 195;
 		}
-		document.getElementById("volumePointer").style.left = volumePointerY + "px";
-		document.getElementById("video").volume = Math.round((volumePointerY - 45) / 150 * 100) / 100;
+		document.getElementById("volumePointer").style.left = volumePointerX + "px";
+		document.getElementById("video").volume = Math.round((volumePointerX - 45) / 150 * 100) / 100;
+	}else if(seekPointerDragFlag){
+		document.getElementById("video").currentTime = document.getElementById("video").duration * Math.round(clientX / window.innerWidth * 10000) / 10000;
 	}
 };
 
@@ -499,6 +567,10 @@ window.onmouseup = function(){
 		volumePointerDragFlag = false;
 		document.getElementById("volumeHover").classList.remove("show");
 		document.getElementById("volumePointer").classList.remove("show");
+	}else if(seekPointerDragFlag){
+		seekPointerDragFlag = false;
+		document.getElementById("seekbarFrame").classList.remove("show");
+		document.getElementById("seekPointer").classList.remove("show");
 	}
 };
 
@@ -569,5 +641,9 @@ document.onchange = function(){
 		document.getElementById("volume").innerText = Math.round(mediaVolume * 100); // 現在の音量を表示する[0 ~ 100]
 		document.getElementById("volumeInside").style.width = mediaVolume * 100 + "%";
 		document.getElementById("volumePointer").style.left = 45 + 150 * mediaVolume + "px";
+	};
+
+	document.getElementById("video").ontimeupdate = function(){
+		playback();
 	};
 };

@@ -114,11 +114,11 @@ html,body{
 }
 /********************************************************************************************************************/
 /*controlPanel(layer_3)の子要素*/
-#seekbarSpace{
-	height: 10px;
+#seekbar{
+	height: 25px;
 	width: 100%;
 	position: absolute;
-	bottom: 40px;
+	bottom: 35px;
 }
 #operation{
 	height: 40px;
@@ -128,75 +128,46 @@ html,body{
 	position: absolute;
 	bottom: 0px;
 }
-/*seekbarSpaceの子要素*/
-#seekbar[type="range"]{
-	-webkit-appearance: none;
-	appearance: none;
-	background-color: rgba(128, 128, 128, 0.3);
-	width: 100%;
-	margin: 0px;
-	position: absolute;
-	cursor: pointer;
-	transition: height .1s ease-out, bottom .1s ease-out;
-	height: 4px;
-	bottom: 0px;
-}
-#seekbar[type="range"].hover{
-	transition: height .1s ease-out, bottom .1s ease-out;
-	height: 8px;
-	bottom: -2px;
-}
-#seekbar[type="range"]:focus,#seekbar[type="range"]:active{
-	outline: none;
-}
-#seekbar[type="range"]::-webkit-slider-thumb{
-/* 	-webkit-appearance: none;
-	appearance: none;
-	position: relative;
-	border: none;
-	width: 12px;
-	height: 12px;
-	display: block;
-	background-color: aqua;
+/*seekbarの子要素*/
+#seekPointer{
+	height: 14px;
+	width: 14px;
 	border-radius: 50%;
-	-webkit-border-radius: 50%;
-	z-index: 999;*/
-	opacity: 0;
+	background: aqua;
+	position: absolute;
+	top: 11px;
+	left: -7px;
+	transition: transform .1s ease-out;
+	transform: scale(0);
+}
+#seekPointer.hover{
+	transition: transform .05s ease-in;
+	transform: scale(1);
+}
+#seekbarFrame{
+	width: 100%;
+	position: absolute;
+	background: rgba(255, 255, 255, 0.1);
+	overflow: hidden;
+	height: 4px;
+	bottom: 5px;
+}
+#seekbarFrame.hover{
+	height: 6px;
+	bottom: 4px;
 }
 #progressBar{
+	height: 100%;
 	width: 0%;
-	margin: 0px;
+	background: aqua;
+}
+#progressHover{
+	height: 100%;
+	width: 0%;
+	background: rgba(255, 255, 255, 0.3);
 	position: absolute;
-	background-color: aqua;
-	cursor: pointer;
-	transition: height .1s ease-out, bottom .1s ease-out;
-	height: 4px;
-	bottom: 0px;
-}
-#progressBar.hover{
-	transition: height .1s ease-out, bottom .1s ease-out;
-	height: 8px;
-	bottom: -2px;
-}
-#progressPoint{
-	background-color: aqua;
-	border-radius: 50%;
-	z-index: 888;
-	position: absolute;
-	cursor: pointer;
-	transition: height .15s ease-out, width .15s ease-out, bottom .15s ease-out, left .15s ease-out;
-	height: 4px;
-	width: 4px;
-	bottom: 0px;
-	left: -2px;
-}
-#progressPoint.hover{
-	transition: height .15s ease-out, width .15s ease-out, bottom .15s ease-out, left .15s ease-out;
-	height: 16px;
-	width: 16px;
-	bottom: -6px;
-	left: -8px;
-	z-index: 888;
+	top: 0px;
+	left: 0px;
 }
 /*operationの子要素*/
 #operation_left{
@@ -226,6 +197,18 @@ html,body{
 	transition: width .2s ease-out 0s;
 	width: 210px;
 }
+#volumePointer{
+	z-index: 1;
+	height: 14px;
+	width: 14px;
+	background: aqua;
+	border-radius: 50%;
+	position: absolute;
+	top: 13px;
+	left: 195px;
+	transition: transform .2s .5s;
+	transform: scale(0);
+}
 #volumeVar{
 	height: 40px;
 	width: 170px;
@@ -249,18 +232,6 @@ html,body{
 #volumeInside{
 	height: 40px;
 	background: aqua;
-}
-#volumePointer{
-	z-index: 1;
-	height: 14px;
-	width: 14px;
-	background: aqua;
-	border-radius: 50%;
-	position: absolute;
-	top: 13px;
-	left: 195px;
-	transition: transform .2s .5s;
-	transform: scale(0);
 }
 #volumePointer.show{
 	transition: transform .2s .15s;

@@ -138,13 +138,13 @@ document.getElementById("mediaFileInput").onchange = function(e){
 			document.getElementById("seekbar").max = document.getElementById("video").duration;
 			document.getElementById("seekbar").value = 0;
 			document.getElementById("progressBar").style.width = "0%";
-			document.getElementById("progressPoint").style.transform = "translateX(0px)";
+			document.getElementById("seekPointer").style.left = -7 + "px";
 		} else {
 			document.getElementById("video").addEventListener("loadedmetadata",function(){
 				document.getElementById("seekbar").max = document.getElementById("video").duration;
 				document.getElementById("seekbar").value = 0;
 				document.getElementById("progressBar").style.width = "0%";
-				document.getElementById("progressPoint").style.transform = "translateX(0px)";
+				document.getElementById("seekPointer").style.left = -7 + "px";
 			});
 		}
 	}
