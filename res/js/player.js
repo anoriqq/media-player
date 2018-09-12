@@ -442,6 +442,12 @@ document.getElementById("volumeSpace").onmouseleave = function(){
 	document.getElementById("volumePointer").classList.remove("show");
 };
 
+/**
+ * volumeSpaceでマウスホイールが回されたときに実行される関数｡
+ * <br>それぞれの方向に音量を更新する｡
+ * @param {object} e mousewheelEventオブジェクト
+ * @returns {void}
+ */
 document.getElementById("volumeSpace").onmousewheel = function(e){
 	/* プラス方向にホイールを回したとき､かつ､現在の音量が0より大きいときtrue */
 	if(e.deltaY > 0){
