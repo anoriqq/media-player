@@ -1,0 +1,340 @@
+/*layer_1 メディア部分*/
+html,body{
+	height: 100vh;
+	width: 100vw;
+	background-color: black;
+	margin: 0px;
+	overflow: hidden;
+}
+#mediaList{
+	height: 100%;
+	width: 100%;
+}
+.video{
+	height: 100%;
+	width: 100%;
+}
+/*layer_2 オーバーレイ部分*/
+#overlay{
+	height: 100vh;
+	width: 100vw;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	transition: opacity .3s ease-out;
+	transition-delay: .6s;
+	opacity: 0;
+}
+#overlay.show{
+	transition: opacity .3s ease-out;
+	opacity: .8;
+}
+/*layer_3 コントローラー部分*/
+#controlPanel{
+	height: 45px;
+	width: 100vw;
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	transition: opacity .3s ease-out, margin-bottom .3s ease-out;
+	transition-delay: .6s;
+	opacity: .4;
+	margin-bottom: -40px;
+}
+#controlPanel.show{
+	transition: opacity .3s ease-out, margin-bottom .3s ease-out;
+	opacity: 1;
+	margin-bottom: 0px;
+}
+/*layer_4 ドラックアンドドロップエリア部分*/
+#dragNdropArea{
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	background: rgba(0, 0, 0, .5);
+	transition: opacity .01s ease-out, top .5s;
+	opacity: .5;
+	top: -3000px;
+}
+#dragNdropArea.show{
+	display: flex;
+	transition: opacity .3s ease-out, top .1s;
+	opacity: 1;
+	top: 0px;
+}
+/********************************************************************************************************************/
+/*overlay(layer_2)の子要素*/
+#upperPart{
+	height: 10%;
+	width: 100%;
+	background: linear-gradient(to bottom, rgb(0, 0, 0), rgba(0, 0, 0, 0));
+}
+#center{
+	height: 80%;
+	width: 100%;
+	display: flex;
+	position: relative;
+}
+#bottom{
+	height: 10%;
+	width: 100%;
+	background: linear-gradient(to top, rgb(0, 0, 0), rgba(0, 0, 0, 0));
+}
+/*centerの子要素*/
+#readProgressBar{
+	margin: auto;
+	background: blue;
+	width: 50%;
+	height: 50px;
+	display: flex;
+	border: 6px solid black;
+	transition: opacity 1s linear;
+	opacity: 0;
+}
+#readProgressBar.loading {
+	opacity: 1;
+}
+/*readProgressBarの子要素*/
+#readPercent{
+	background: yellow;
+	height: 100%;
+	width: 50%;
+	font-size: 36px;
+}
+#infoMessage{
+	margin: auto;
+	color: rgba(255, 255, 255, .8);
+	font-size: 36px;
+	white-space: nowrap;
+	position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+}
+/*upperPartの子要素*/
+#fileName{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	padding: 15px 20px 0px;
+	font-size: 24px;
+	color: white;
+	transition: opacity .2s ease-out, margin-top .3s ease-out;
+	transition-delay: .6s;
+	opacity: 0;
+	margin-top: -50px;
+	white-space: nowrap;
+}
+#fileName.show{
+	transition: opacity .2s ease-out, margin-top .3s ease-out;
+	opacity: 1;
+	margin-top: 0px;
+}
+/********************************************************************************************************************/
+/*controlPanel(layer_3)の子要素*/
+#seekbarSpace{
+	height: 10px;
+	width: 100%;
+	position: absolute;
+	bottom: 40px;
+}
+#operation{
+	height: 40px;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	position: absolute;
+	bottom: 0px;
+}
+/*seekbarSpaceの子要素*/
+#seekbar[type="range"]{
+	-webkit-appearance: none;
+	appearance: none;
+	background-color: rgba(128, 128, 128, 0.3);
+	width: 100%;
+	margin: 0px;
+	position: absolute;
+	cursor: pointer;
+	transition: height .1s ease-out, bottom .1s ease-out;
+	height: 4px;
+	bottom: 0px;
+}
+#seekbar[type="range"].hover{
+	transition: height .1s ease-out, bottom .1s ease-out;
+	height: 8px;
+	bottom: -2px;
+}
+#seekbar[type="range"]:focus,#seekbar[type="range"]:active{
+	outline: none;
+}
+#seekbar[type="range"]::-webkit-slider-thumb{
+/* 	-webkit-appearance: none;
+	appearance: none;
+	position: relative;
+	border: none;
+	width: 12px;
+	height: 12px;
+	display: block;
+	background-color: aqua;
+	border-radius: 50%;
+	-webkit-border-radius: 50%;
+	z-index: 999;*/
+	opacity: 0;
+}
+#progressBar{
+	width: 0%;
+	margin: 0px;
+	position: absolute;
+	background-color: aqua;
+	cursor: pointer;
+	transition: height .1s ease-out, bottom .1s ease-out;
+	height: 4px;
+	bottom: 0px;
+}
+#progressBar.hover{
+	transition: height .1s ease-out, bottom .1s ease-out;
+	height: 8px;
+	bottom: -2px;
+}
+#progressPoint{
+	background-color: aqua;
+	border-radius: 50%;
+	z-index: 888;
+	position: absolute;
+	cursor: pointer;
+	transition: height .15s ease-out, width .15s ease-out, bottom .15s ease-out, left .15s ease-out;
+	height: 4px;
+	width: 4px;
+	bottom: 0px;
+	left: -2px;
+}
+#progressPoint.hover{
+	transition: height .15s ease-out, width .15s ease-out, bottom .15s ease-out, left .15s ease-out;
+	height: 16px;
+	width: 16px;
+	bottom: -6px;
+	left: -8px;
+	z-index: 888;
+}
+/*operationの子要素*/
+#operation_left{
+	width: 100%;
+	display: flex;
+}
+#operation_right{
+	display: flex;
+	justify-content: right;
+}
+/*operation_leftの子要素*/
+#volumeSpace{
+	height: 40px;
+	display: flex;
+}
+#volumeImageSpace{
+	height: 40px;
+	width: 40px;
+}
+#volumeHover{
+	height: 40px;
+	overflow: hidden;
+	display: flex;
+	transition: width .2s ease-out;
+	width: 0px;
+}#volumeHover.show{
+	width: 210px;
+}
+#volumeVar{
+	height: 40px;
+	width: 170px;
+}
+#volumeSpace{
+	display: flex;
+}
+#volume{
+	color: white;
+	font-size: 14px;
+	margin: auto;
+}
+#volumeFrame{
+	height: 6px;
+	width: 150px;
+	margin: 17px 10px;
+	overflow: hidden;
+	background: rgba(255, 255, 255, .3);
+	border-radius: 2px;
+}
+#volumeInside{
+	height: 40px;
+	background: aqua;
+}
+#volumePointer{
+	z-index: 1;
+	height: 14px;
+	width: 14px;
+	background: aqua;
+	border-radius: 50%;
+	position: absolute;
+	top: 13px;
+	left: 197px;
+	transform: scale(0);
+}
+#volumePointer.show{
+	transition: transform .2s .2s;
+	transform: scale(1);
+}
+#playbackTimeSpace{
+	display: flex;
+}
+/*operation_rightの子要素*/
+#fullscreen{
+	height: 40px;
+	width: 40px;
+}
+.fullscreenImage{
+	transform: scale(0.125);
+	position: absolute;
+	bottom: -60px;
+	right: -60px;
+}
+#FS_2{
+	display: none;
+}
+#loop{
+	height: 40px;
+	width: 40px;
+}
+.loopImage{
+	transform: scale(0.125);
+	position: absolute;
+	bottom: -60px;
+	right: -20px;
+}
+#LP_2{
+	display: none;
+}
+/********************************************************************************************************************/
+p#playbackTime{
+	margin: auto 10px;
+	font-size: 15px;
+	color: white;
+	white-space: nowrap;
+}
+/********************************************************************************************************************/
+#border{
+	height: 80%;
+	width: 80%;
+	margin: auto;
+	background: repeating-linear-gradient(-45deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .1) 25px,rgba(255, 255, 255, .0) 25px, rgba(255, 255, 255, .0) 50px);
+	border: dashed 5px white;
+	display: flex;
+}
+/*borderの子要素*/
+#infoText{
+	font-size: 36px;
+	color: white;
+	margin: auto;
+}
+#mediaFileInput{
+	display: none;
+}
