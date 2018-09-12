@@ -420,7 +420,7 @@ document.onchange = function(){
 		mediaVolume = document.getElementById("video").volume; // 現在の音量を保存する[0.00 ~ 1.00]
 		document.getElementById("volume").innerText = Math.round(mediaVolume * 100); // 現在の音量を表示する[0 ~ 100]
 		document.getElementById("volumeInside").style.width = mediaVolume * 100 + "%";
-		document.getElementById("volumePointer").style.left = 47 + 150 * mediaVolume + "px";
+		document.getElementById("volumePointer").style.left = 45 + 150 * mediaVolume + "px";
 	};
 };
 
@@ -460,4 +460,15 @@ document.getElementById("volumeSpace").onmousewheel = function(e){
 			document.getElementById("video").volume = 1;
 		}
 	}
+};
+
+/**
+ * ボリュームバーをクリックしたときに実行される関数｡
+ * <br>クリックされた位置のX座標をもとに音量を更新する｡
+ * @param {object} e clickイベントオブジェクト
+ * @returns {void}
+ */
+document.getElementById("volumeFrame").onclick = function(e){
+	var clickVolume = Math.round((e.clientX - 50)/150*100)/100;
+	document.getElementById("video").volume = clickVolume;
 };

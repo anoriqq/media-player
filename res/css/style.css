@@ -276,7 +276,7 @@ html,body{
 	border-radius: 50%;
 	position: absolute;
 	top: 13px;
-	left: 197px;
+	left: 195px;
 	transform: scale(0);
 }
 #volumePointer.show{
