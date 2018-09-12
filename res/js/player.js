@@ -351,7 +351,7 @@ document.getElementById("loop").onclick = function(){
  */
 document.onkeydown = function(e){
 	/* onkeydownしたキーがspaceで､videoが存在する時true */
-	if (e.keyCode == 32 && document.getElementById("video").src != ""){
+	if(e.keyCode == 32 && document.getElementById("video").src != ""){
 		/* 再生中ならtrue */
 		if (document.getElementById("video").paused){
 			document.getElementById("video").play();
@@ -361,6 +361,24 @@ document.onkeydown = function(e){
 			clearInterval(checkMouse);
 			clearInterval(checkProgres);
 			showOverlay();
+		}
+	}
+
+	/* upキーを押したときに音量を上げる */
+	if(e.keyCode == 38){
+		if(Math.round(document.getElementById("video").volume * 100) < 99){
+			document.getElementById("video").volume = (Math.round(document.getElementById("video").volume * 100) + 2) / 100;
+		}else{
+			document.getElementById("video").volume = 1;
+		}
+	}
+
+	/* downキーを押したときに音量を下げる */
+	if(e.keyCode == 40){
+		if(Math.round(document.getElementById("video").volume * 100) > 1){
+			document.getElementById("video").volume = (Math.round(document.getElementById("video").volume * 100) - 2) / 100;
+		}else{
+			document.getElementById("video").volume = 0;
 		}
 	}
 };
@@ -392,21 +410,21 @@ document.getElementById("volumeSpace").onmouseleave = function(){
  * @returns {void}
  */
 document.getElementById("volumeSpace").onmousewheel = function(e){
-	/* プラス方向にホイールを回したとき､かつ､現在の音量が0より大きいときtrue */
-	if(e.deltaY > 0){
-		if(Math.round(document.getElementById("video").volume * 100) > 1){
-			document.getElementById("video").volume = (Math.round(document.getElementById("video").volume * 100) - 2) / 100;
-		}else{
-			document.getElementById("video").volume = 0;
-		}
-	}
-
 	/* マイナス方向にホイール回したとき､かつ､現在の音量が1未満のときtrue */
 	if(e.deltaY < 0){
 		if(Math.round(document.getElementById("video").volume * 100) < 99){
 			document.getElementById("video").volume = (Math.round(document.getElementById("video").volume * 100) + 2) / 100;
 		}else{
 			document.getElementById("video").volume = 1;
+		}
+	}
+
+	/* プラス方向にホイールを回したとき､かつ､現在の音量が0より大きいときtrue */
+	if(e.deltaY > 0){
+		if(Math.round(document.getElementById("video").volume * 100) > 1){
+			document.getElementById("video").volume = (Math.round(document.getElementById("video").volume * 100) - 2) / 100;
+		}else{
+			document.getElementById("video").volume = 0;
 		}
 	}
 };
@@ -537,9 +555,15 @@ document.onchange = function(){
 	 * @returns {void}
 	 */
 	document.getElementById("video").onvolumechange = function(){
+		document.getElementById("volumeHover").classList.add("show");
+		document.getElementById("volumePointer").classList.add("show");
 		mediaVolume = document.getElementById("video").volume; // 現在の音量を保存する[0.00 ~ 1.00]
 		document.getElementById("volume").innerText = Math.round(mediaVolume * 100); // 現在の音量を表示する[0 ~ 100]
 		document.getElementById("volumeInside").style.width = mediaVolume * 100 + "%";
 		document.getElementById("volumePointer").style.left = 45 + 150 * mediaVolume + "px";
+		setTimeout(function(){
+			document.getElementById("volumeHover").classList.remove("show");
+			document.getElementById("volumePointer").classList.remove("show");
+		},1000);
 	};
 };
