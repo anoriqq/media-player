@@ -291,24 +291,12 @@ html,body{
 	height: 40px;
 	width: 40px;
 }
-.fullscreenImage{
-	transform: scale(0.125);
-	position: absolute;
-	bottom: -60px;
-	right: -60px;
-}
 #FS_2{
 	display: none;
 }
 #loop{
 	height: 40px;
 	width: 40px;
-}
-.loopImage{
-	transform: scale(0.125);
-	position: absolute;
-	bottom: -60px;
-	right: -20px;
 }
 #LP_2{
 	display: none;
